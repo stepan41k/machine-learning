@@ -5,7 +5,6 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler
 
-# 1. Загрузка данных
 file_path = '../../content/prepared.csv'
 if not os.path.exists(file_path):
     print("Загрузка файла...")
@@ -13,27 +12,21 @@ if not os.path.exists(file_path):
 
 df = pd.read_csv(file_path, index_col=0)
 
-# Предполагаем, что целевой признак (y) — это последний столбец
 X = df.iloc[:, :-1]
 y = df.iloc[:, -1]
 
 print(f"Размерность данных: {X.shape}")
 
-# !!! ВАЖНО: Масштабирование данных для линейной модели !!!
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
-# Превращаем обратно в DataFrame, чтобы сохранить имена колонок
 X_scaled_df = pd.DataFrame(X_scaled, columns=X.columns)
 
-# 2. Линейная модель (Логистическая регрессия)
-# Теперь max_iter=1000 будет более чем достаточно
 lr = LogisticRegression(max_iter=1000, random_state=42)
 lr.fit(X_scaled_df, y)
 
-# Используем коэффициенты отмасштабированных признаков
 if lr.coef_.shape[0] > 1: # Если классов много
     lr_importances = np.mean(np.abs(lr.coef_), axis=0)
-else: # Если бинарная классификация
+else:
     lr_importances = np.abs(lr.coef_[0])
 
 lr_results = pd.Series(lr_importances, index=X.columns).sort_values(ascending=False)

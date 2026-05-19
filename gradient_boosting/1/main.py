@@ -3,22 +3,18 @@ from sklearn.datasets import make_classification
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.model_selection import GridSearchCV
 
-# 1. Генерация данных (как в уроке)
 X, y = make_classification(n_samples=1000, n_features=2, n_informative=2,
                            n_classes=2, n_redundant=0, 
                            n_clusters_per_class=2, flip_y=0.1, random_state=1)
 
-# 2. Быстрый подбор параметров
-# Мы уменьшили количество вариантов и добавили n_jobs=-1 для ускорения
 params = {
-    'n_estimators': [100, 200], # Увеличим чуть-чуть по сравнению с уроком
-    'max_depth': [3, 4],        # Урок использовал max_depth=3
-    'learning_rate': [0.1]      # Оставим стандартный шаг
+    'n_estimators': [100, 200],
+    'max_depth': [3, 4],       
+    'learning_rate': [0.1]    
 }
 
 boost = GradientBoostingClassifier(random_state=42)
 
-# n_jobs=-1 заставляет компьютер считать параллельно на всех ядрах
 grid = GridSearchCV(boost, params, scoring='accuracy', cv=3, n_jobs=-1)
 grid.fit(X, y)
 
