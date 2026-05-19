@@ -6,7 +6,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier, plot_tree
 from sklearn.metrics import roc_auc_score
 
-# Генерация данных
 seed = 1
 X, y = datasets.make_classification(
     n_samples=1000,
@@ -17,10 +16,8 @@ X, y = datasets.make_classification(
     random_state=seed
 )
 
-# Разделение на обучающую и тестовую выборки (70/30)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=seed)
 
-# Визуализация (первые два признака)
 plt.figure(figsize=(8, 6))
 sns.scatterplot(x=X[:, 0], y=X[:, 1], hue=y, s=50, edgecolor='black')
 plt.xlabel('Признак x1')
@@ -30,25 +27,20 @@ plt.show()
 
 print("\n")
 
-# Обучение базового дерева
 clf_base = DecisionTreeClassifier(random_state=seed)
 clf_base.fit(X_train, y_train)
 
-# Визуализация дерева (ограничим отображение для наглядности, само дерево глубокое)
 plt.figure(figsize=(20, 10))
 plot_tree(clf_base, max_depth=3, filled=True, feature_names=[f'f{i}' for i in range(20)])
 plt.title("Верхняя часть структуры дерева")
 plt.show()
 
-# Подсчет уровней и листьев
 depth = clf_base.get_depth()
 leaves = clf_base.get_n_leaves()
 
 print(f"Глубина дерева (уровней): {depth}")
 print(f"Количество листьев: {leaves}")
 
-
-# Получение вероятностей для ROC AUC
 train_probs = clf_base.predict_proba(X_train)[:, 1]
 test_probs = clf_base.predict_proba(X_test)[:, 1]
 
@@ -58,7 +50,6 @@ roc_auc_test = roc_auc_score(y_test, test_probs)
 print(f"ROC AUC на обучающей выборке: {roc_auc_train:.3f}")
 print(f"ROC AUC на тестовой выборке: {roc_auc_test:.3f}")
 
-# Анализ
 if roc_auc_train > 0.99 and (roc_auc_train - roc_auc_test) > 0.1:
     print("Наблюдается явное переобучение: точность на обучении идеальна, а на тесте заметно ниже.")
 elif roc_auc_train < 0.7:
@@ -66,18 +57,15 @@ elif roc_auc_train < 0.7:
 else:
     print("Модель работает стабильно.")
 
-
-    # Пример подобранных параметров
 clf_tuned = DecisionTreeClassifier(
-    max_depth=6,              # Ограничиваем глубину, чтобы дерево не "зазубривало" данные
-    min_samples_leaf=15,      # В листе должно быть не менее 15 объектов (сглаживает шум)
-    max_features=15,          # Используем подмножество признаков для каждого сплита
+    max_depth=6,             
+    min_samples_leaf=15,      
+    max_features=15,         
     random_state=seed
 )
 
 clf_tuned.fit(X_train, y_train)
 
-# Проверка новых результатов
 tuned_train_auc = roc_auc_score(y_train, clf_tuned.predict_proba(X_train)[:, 1])
 tuned_test_auc = roc_auc_score(y_test, clf_tuned.predict_proba(X_test)[:, 1])
 
