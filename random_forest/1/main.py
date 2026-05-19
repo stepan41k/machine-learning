@@ -5,18 +5,13 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import r2_score
 
-# Загрузка датасета (предполагается, что файл в той же папке)
-df = pd.read_csv('../../content/prepared.csv') # Если нужно загрузить заново
+df = pd.read_csv('../../content/prepared.csv'
 
-# 2.1 Выделение матрицы признаков X и целевой переменной y
-# Удаляем 'Id', 'Price' и 'PriceOneRoom', как указано в задании
 X = df.drop(columns=['Id', 'Price', 'PriceOneRoom'])
 y = df['Price']
 
-# 2.2 Разбиение на train и valid (возьмем стандартное соотношение 70/30)
 X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.3, random_state=42)
 
-# Список количества деревьев для проверки
 n_trees = [1, 5, 10, 20, 50, 100, 250, 500, 1000]
 train_scores = []
 valid_scores = []
@@ -28,9 +23,8 @@ for n in n_trees:
     train_scores.append(r2_score(y_train, rf.predict(X_train)))
     valid_scores.append(r2_score(y_valid, rf.predict(X_valid)))
 
-    print(f"Готово для n_estimators = {n}") # Чтобы видеть прогресс
+    print(f"Готово для n_estimators = {n}")
 
-# Построение графика
 plt.figure(figsize=(10, 6))
 plt.plot(n_trees, train_scores, label='Обучающая выборка', marker='o')
 plt.plot(n_trees, valid_scores, label='Отложенная выборка', marker='o')
