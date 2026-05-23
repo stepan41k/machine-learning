@@ -51,11 +51,11 @@ print(f"ROC AUC на обучающей выборке: {roc_auc_train:.3f}")
 print(f"ROC AUC на тестовой выборке: {roc_auc_test:.3f}")
 
 if roc_auc_train > 0.99 and (roc_auc_train - roc_auc_test) > 0.1:
-    print("Наблюдается явное переобучение: точность на обучении идеальна, а на тесте заметно ниже.")
+    print("Наблюдается переобучение")
 elif roc_auc_train < 0.7:
-    print("Наблюдается недообучение.")
+    print("Наблюдается недообучение")
 else:
-    print("Модель работает стабильно.")
+    print("Модель работает стабильно")
 
 clf_tuned = DecisionTreeClassifier(
     max_depth=6,             
@@ -69,9 +69,9 @@ clf_tuned.fit(X_train, y_train)
 tuned_train_auc = roc_auc_score(y_train, clf_tuned.predict_proba(X_train)[:, 1])
 tuned_test_auc = roc_auc_score(y_test, clf_tuned.predict_proba(X_test)[:, 1])
 
-print(f"Настроенное дерево:")
+print("\nНастроенное дерево:")
 print(f"ROC AUC Train: {tuned_train_auc:.3f}")
 print(f"ROC AUC Test: {tuned_test_auc:.3f}")
 
 if tuned_test_auc > 0.85:
-    print("Цель достигнута! Точность > 0.85 на отложенной выборке.")
+    print("Точность > 0.85 на отложенной выборке")

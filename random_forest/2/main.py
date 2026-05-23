@@ -1,4 +1,4 @@
-import pandas as pd
+import pandas as pd# Визуализация важности признаков (опционально)
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
@@ -20,9 +20,9 @@ r2_valid = r2_score(y_valid, y_pred)
 print(f"Коэффициент детерминации R2 на валидации: {r2_valid:.4f}")
 
 if r2_valid > 0.73:
-    print("Условие R2 > 0.73 выполнено!")
+    print("Условие R2 > 0.73 выполнено")
 else:
-    print("Нужно еще подкорректировать параметры.")
+    print("Нужно еще подкорректировать параметры")
 
 importances = pd.Series(final_model.feature_importances_, index=X.columns)
 importances = importances.sort_values(ascending=False)

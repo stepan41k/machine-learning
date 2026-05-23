@@ -31,14 +31,11 @@ else:
 
 lr_results = pd.Series(lr_importances, index=X.columns).sort_values(ascending=False)
 
-# 3. Деревянная модель (Random Forest)
-# Для деревьев масштабирование не критично, можно использовать исходный X
 rf = RandomForestClassifier(n_estimators=100, random_state=42)
 rf.fit(X, y)
 
 rf_results = pd.Series(rf.feature_importances_, index=X.columns).sort_values(ascending=False)
 
-# 4. Вывод результатов
 print("\n" + "="*40)
 print("ТОП-5 признаков (Линейная модель - после масштабирования):")
 print(lr_results.head(5))
@@ -47,7 +44,6 @@ print("\n" + "="*40)
 print("ТОП-5 признаков (Random Forest):")
 print(rf_results.head(5))
 
-# Сравнение
 top_lr = set(lr_results.head(5).index)
 top_rf = set(rf_results.head(5).index)
 common = top_lr.intersection(top_rf)
