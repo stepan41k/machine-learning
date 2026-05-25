@@ -12,7 +12,14 @@ y = df['Price']
 
 X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.3, random_state=42)
 
-final_model = RandomForestRegressor(n_estimators=300, max_depth=14, random_state=42, n_jobs=-1)
+final_model = RandomForestRegressor(
+    n_estimators=500, 
+    max_depth=21, 
+    max_features=0.3, 
+    min_samples_leaf=2, 
+    random_state=42, 
+    n_jobs=-1
+)
 final_model.fit(X_train, y_train)
 
 y_pred = final_model.predict(X_valid)
