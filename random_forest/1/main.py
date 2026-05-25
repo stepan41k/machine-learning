@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import r2_score
 
-df = pd.read_csv('../../content/prepared.csv'
+df = pd.read_csv('../../content/prepared.csv')
 
 X = df.drop(columns=['Id', 'Price', 'PriceOneRoom'])
 y = df['Price']
